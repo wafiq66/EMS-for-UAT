@@ -122,6 +122,7 @@ nav ul li a:hover {
 }
 
 .profile-basic input[type="text"],
+.profile-basic input[type="tel"],
 .profile-basic input[type="email"],
 .profile-basic input[type="password"] {
     width: 100%;

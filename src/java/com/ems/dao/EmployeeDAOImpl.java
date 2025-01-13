@@ -70,7 +70,45 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             throw new RuntimeException("Error updating employee: " + e.getMessage(), e);
         } 
     }
+    
+    @Override
+    public boolean employeeEmailChecker(String email) {
+        this.conn = Connect.getConnection();
+        String sql = "SELECT COUNT(*) FROM EMPLOYEE WHERE EMPLOYEEEMAIL = ?";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1, email);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    // If count is greater than 0, then the email exists
+                    return resultSet.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Replace with logging framework in production
+            throw new RuntimeException("Error checking employee email: " + e.getMessage(), e);
+        }
+        return false; // Email does not exist
+    }
 
+    @Override
+    public boolean employeePhoneNumberChecker(String phoneNumber) {
+        this.conn = Connect.getConnection();
+        String sql = "SELECT COUNT(*) FROM EMPLOYEE WHERE EMPLOYEEPHONENUMBER = ?";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1, phoneNumber);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    // If count is greater than 0, then the phone number exists
+                    return resultSet.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Replace with logging framework in production
+            throw new RuntimeException("Error checking employee phone number: " + e.getMessage(), e);
+        }
+        return false; // Phone number does not exist
+    }
+    
     @Override
     public int getEmployeeBranchID(Employee employee) {
         this.conn = Connect.getConnection();

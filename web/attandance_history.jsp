@@ -97,7 +97,17 @@
                             <tr>
                                 <td><%= a.getAttendanceDate() %></td>
                                 <td><%= sdf.format(a.getClockInTime()) %></td>
-                                <td><%= sdf.format(a.getClockOutTime()) %></td>
+                                <td>
+                                    <%
+                                        if (a.getClockOutTime() != null) {
+                                            // Format the overtime duration if it's not null
+                                            out.print(sdf.format(a.getClockOutTime()));
+                                        } else {
+                                            // Handle the case where overtimeDuration is null
+                                            out.print("N/A"); // or you can use an empty string: out.print("");
+                                        }
+                                    %>
+                                </td>
                                 <td>
                                     <%
                                         if (a.getOvertimeDuration() != null) {

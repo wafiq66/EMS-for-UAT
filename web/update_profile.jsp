@@ -74,7 +74,15 @@
                         </li>
                         <li>
                             <label for="phone">Phone:</label>
-                            <input name="phone" type="text" id="phone" name="phone" value="<%= employee.getEmployeePhoneNumber() %>" required>
+                            <input 
+                                type="tel" 
+                                id="phone" 
+                                name="phone" 
+                                value="<%= employee.getEmployeePhoneNumber() %>" 
+                                pattern="01[1-9]-\d{3} \d{4}|01[1-9]-\d{4} \d{4}" 
+                                title="Please enter a valid phone number (e.g., 011-111 1111 or 011-1111 1111)"
+                                placeholder="012-345 6789"
+                                required>
                         </li>
                         <li>
                             <label for="email">Email:</label>
@@ -91,6 +99,7 @@
                     <input type="hidden" name="action" value="updateProfile">
                     <input type="submit" value="Update">
                   <a href="employee_profile_main.jsp">Cancel</a>
+                  <p style="color:red" >${errorMsg}</p>
                   <p>${message}</p>
                 </div>
               </div>

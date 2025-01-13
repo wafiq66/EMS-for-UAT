@@ -16,6 +16,8 @@ import com.ems.model.Attendance;
 public interface EmployeeDAO {
     void addEmployee(Employee employee,int branchID, int officerID);
     void updateEmployee(Employee employee,int branchID);
+    boolean employeeEmailChecker(String email);
+    boolean employeePhoneNumberChecker(String phoneNumber);
     int getEmployeeBranchID(Employee employee);
     Employee getEmployeeByPassport(String passport);
     Employee getEmployeeById(int employeeID);

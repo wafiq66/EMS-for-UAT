@@ -50,7 +50,7 @@ public class ManageEmployeeProfileController extends HttpServlet {
                 updateEmployee(request,response);
             }
             else if(action.equals("updateProfile")){
-                updateProfile(request,response);
+                verifyEmailPhone(request,response);
             }
         }
     }
@@ -70,6 +70,45 @@ public class ManageEmployeeProfileController extends HttpServlet {
         
         }
     }
+    
+    protected void verifyEmailPhone(HttpServletRequest request, HttpServletResponse response){
+            
+        try{
+            HttpSession session = request.getSession();
+            Employee employee = (Employee) session.getAttribute("employeeLog");
+            
+            String phoneNumber = request.getParameter("phone");
+            String email = request.getParameter("email");
+            String errorMsg = null;
+            
+            
+            
+            if((!employee.getEmployeeEmail().equals(email) && employeeDAO.employeeEmailChecker(email)) || ( !employee.getEmployeePhoneNumber().equals(phoneNumber) && employeeDAO.employeePhoneNumberChecker(phoneNumber))){
+                
+                if((!employee.getEmployeeEmail().equals(email) && employeeDAO.employeeEmailChecker(email)) && ( !employee.getEmployeePhoneNumber().equals(phoneNumber) && employeeDAO.employeePhoneNumberChecker(phoneNumber))){
+                    errorMsg = "Phone Number and email have already been registered";
+                }
+                else if(!employee.getEmployeeEmail().equals(email) && employeeDAO.employeeEmailChecker(email)){
+                    errorMsg = "Email has already been registered";
+                }
+                else if(!employee.getEmployeePhoneNumber().equals(phoneNumber) && employeeDAO.employeePhoneNumberChecker(phoneNumber)){
+                    errorMsg = "Phone Number has already been registered";
+                }
+                
+                request.setAttribute("errorMsg",errorMsg);
+                request.getRequestDispatcher("update_profile.jsp").forward(request, response);
+            }
+            else{
+                updateProfile(request,response);
+            }
+            
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+            
+    }
+    
     protected void updateEmployee(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try{

@@ -64,7 +64,7 @@
                                     <label> Passport Number:-</label>
                                     <input name="passportNumber" type="text" placeholder="Enter passport number" value="<%=passportNumber %>" disabled/>
                             </div>
-                            <br>
+                            <p style="color:red" >${errorMsg}</p>
                             <div class="input-box">
                                     <label> Name:-</label>
                                     <input name="name" type="text" placeholder="Enter full name" required/>
@@ -72,7 +72,14 @@
                             <br>
                             <div class="input-box">
                                     <label> Phone Number:-</label>
-                                    <input name="phoneNumber" type="text" placeholder="Enter phone number" required/>
+                                    <input 
+                                    type="text" 
+                                    id="phone" 
+                                    name="phoneNumber" 
+                                    pattern="01[1-9]-\d{3} \d{4}|01[1-9]-\d{4} \d{4}" 
+                                    title="Please enter a valid phone number (e.g., 011-111 1111 or 011-1111 1111)"
+                                    placeholder="012-345 6789"
+                                    required>   
                             </div>
                             <br>
 
