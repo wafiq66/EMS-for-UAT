@@ -48,7 +48,7 @@
             <form action="register_employee.do" class="form" method="post">
             	<div class="input-box">
                 	<label> Passport Number</label>
-                	<input type="text" placeholder="Enter passport number" name="employeePassportNumber" required/>
+                	<input type="text" placeholder="Enter passport number" name="employeePassportNumber" pattern="[A-Z][0-9]{7}" title="Please enter a passport number in the format: A00000000" required/>
             	</div>
                 <input type="hidden" value="verifyPassportNumber" name="action">
                 <input type="submit" value="Check Passport Number">

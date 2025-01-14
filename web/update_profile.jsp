@@ -66,7 +66,7 @@
                     <ul class="personal-info">
                         <li>
                             <label for="employeeID">Employee Password:</label>
-                            <input name="password" type="password" id="employeePassword"  value="<%= employee.getEmployeePassword() %>" required>
+                            <input name="password" type="password" id="employeePassword"  value="<%= employee.getEmployeePassword() %>"  required>
                         </li>
                         <li>
                             <label for="employeeID">Confirm Employee Password:</label>
@@ -74,11 +74,11 @@
                         </li>
                         <li>
                             <label for="phone">Phone:</label>
-                            <input name="phone" type="text" id="phone" name="phone" value="<%= employee.getEmployeePhoneNumber() %>" required>
+                            <input name="phone" type="text" id="phone" name="phone" value="<%= employee.getEmployeePhoneNumber() %>" pattern="^01[0-9]-?[0-9]{3,4}[0-9]{4}$" title="Please enter a valid Malaysian phone number" required>
                         </li>
                         <li>
                             <label for="email">Email:</label>
-                            <input name="email" type="email" id="email" name="email" value="<%= employee.getEmployeeEmail() %>" required>
+                            <input name="email" type="email" id="email" name="email" value="<%= employee.getEmployeeEmail() %>" pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$" title="Please enter a valid email address (e.g., example@gmail.com) without spaces" required>
                         </li>
                     
 
