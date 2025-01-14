@@ -8,6 +8,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
         <meta name="description" content="Smarthr - Bootstrap Admin Template">
@@ -48,6 +49,24 @@
 		<![endif]-->
     </head>
     <body>
+        <script>
+            function validateEmail() {
+                const emailInput = document.getElementById('email').value;
+
+                // Array of disallowed characters
+                const disallowedChars = [',', ':', ';', '<', '>', '(', ')', '[', ']', '\\', '/'];
+
+                // Check if the input contains any disallowed character
+                for (const char of disallowedChars) {
+                    if (emailInput.includes(char)) {
+                        alert(`Invalid email: the character '${char}' is not allowed.`);
+                        return false; // Prevent form submission
+                    }
+                }
+
+                return true; // Allow form submission if valid
+            }
+        </script>
         <%
             String passportNumber = (String)session.getAttribute("newPassportNumber");
             String registerNotice = (String)request.getAttribute("registerNotice");
@@ -58,34 +77,28 @@
         %>
             <section class="container">
                     <header> Registration Form</header>
-                    <form action="register_employee.do" class="form" method="post">
+                    <form action="register_employee.do" class="form" method="post" onsubmit="return validateEmail()">
                             
                             <div class="input-box">
                                     <label> Passport Number:-</label>
                                     <input name="passportNumber" type="text" placeholder="Enter passport number" value="<%=passportNumber %>" disabled/>
                             </div>
                             <p style="color:red" >${errorMsg}</p>
+                            <br>
                             <div class="input-box">
                                     <label> Name:-</label>
-                                    <input name="name" type="text" placeholder="Enter full name" required/>
+                                    <input name="name" type="text" placeholder="Enter full name" pattern ="^[A-Za-z\s]+$" title="Please enter a name in letter only" required/>
                             </div>
                             <br>
                             <div class="input-box">
                                     <label> Phone Number:-</label>
-                                    <input 
-                                    type="text" 
-                                    id="phone" 
-                                    name="phoneNumber" 
-                                    pattern="01[1-9]-\d{3} \d{4}|01[1-9]-\d{4} \d{4}" 
-                                    title="Please enter a valid phone number (e.g., 011-111 1111 or 011-1111 1111)"
-                                    placeholder="012-345 6789"
-                                    required>   
+                                    <input name="phoneNumber" type="text" placeholder="Enter phone number" pattern="^01[0-9]-?[0-9]{3,4}[0-9]{4}$" title="Please enter a valid Malaysian phone number" required/>
                             </div>
                             <br>
 
                             <div class="input-box">
                                     <label> Email:-</label>
-                                    <input name="email" type="text" placeholder="Enter email address" required/>
+                                    <input name="email" type="email" id="email" placeholder="Enter email address" pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$" title="Please enter a valid email address (e.g., example@gmail.com) without spaces" required/>
                             </div>
 
                             <br>
@@ -133,6 +146,5 @@
 				
 				
 
-			
-				
+
 				

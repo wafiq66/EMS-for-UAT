@@ -1,3 +1,4 @@
+
 <%@page import="com.ems.model.Employee" %>
 <%@page import="com.ems.model.Branch" %>
 <%@page import="com.ems.dao.EmployeeDAO" %>
@@ -24,6 +25,24 @@
 </head>
 
 <body>
+  <script>
+            function validateEmail() {
+                const emailInput = document.getElementById('email').value;
+
+                // Array of disallowed characters
+                const disallowedChars = [',', ':', ';', '<', '>', '(', ')', '[', ']', '\\', '/'];
+
+                // Check if the input contains any disallowed character
+                for (const char of disallowedChars) {
+                    if (emailInput.includes(char)) {
+                        alert(`Invalid email: the character '${char}' is not allowed.`);
+                        return false; // Prevent form submission
+                    }
+                }
+
+                return true; // Allow form submission if valid
+            }
+        </script>
     <%
         final EmployeeDAO employeeDAO = new EmployeeDAOImpl();
         final BranchDAO branchDAO = new BranchDAOImpl();
@@ -58,7 +77,7 @@
         </div>
         <!-- /Header -->
         <!-- Page Content -->
-        <form action="manage_employee.do" method="post">
+        <form action="manage_employee.do" method="post" onsubmit="return validateEmail()">
             <div class="content container-fluid">
                 <div class="profile-basic">
                     <h2 class="card-title">Edit Profile </h2>
@@ -66,7 +85,7 @@
                     <ul class="personal-info">
                         <li>
                             <label for="employeeID">Employee Password:</label>
-                            <input name="password" type="password" id="employeePassword"  value="<%= employee.getEmployeePassword() %>" required>
+                            <input name="password" type="password" id="employeePassword"  value="<%= employee.getEmployeePassword() %>"  required>
                         </li>
                         <li>
                             <label for="employeeID">Confirm Employee Password:</label>
@@ -74,19 +93,11 @@
                         </li>
                         <li>
                             <label for="phone">Phone:</label>
-                            <input 
-                                type="tel" 
-                                id="phone" 
-                                name="phone" 
-                                value="<%= employee.getEmployeePhoneNumber() %>" 
-                                pattern="01[1-9]-\d{3}\d{4}|01[1-9]-\d{4}\d{4}" 
-                                title="Please enter a valid phone number (e.g., 011-1111111 or 011-11111111)"
-                                placeholder="012-3456789"
-                                required>
+                            <input name="phone" type="text" id="phone" name="phone" value="<%= employee.getEmployeePhoneNumber() %>" pattern="^01[0-9]-?[0-9]{3,4}[0-9]{4}$" title="Please enter a valid Malaysian phone number" required>
                         </li>
                         <li>
                             <label for="email">Email:</label>
-                            <input name="email" type="email" id="email" name="email" value="<%= employee.getEmployeeEmail() %>" required>
+                            <input name="email" type="email" id="email" name="email" value="<%= employee.getEmployeeEmail() %>" pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$" title="Please enter a valid email address (e.g., example@gmail.com) without spaces" required>
                         </li>
                     
 
@@ -108,4 +119,5 @@
         </div>
 		<!-- /Main Wrapper -->
     </body>
+
 </html>
