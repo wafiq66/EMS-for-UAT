@@ -93,7 +93,7 @@
                         </li>
                         <li>
                             <label for="phone">Phone:</label>
-                            <input name="phone" type="text" id="phone" name="phone" value="<%= employee.getEmployeePhoneNumber() %>" pattern="^01[0-9]-?[0-9]{3,4}[0-9]{4}$" title="Please enter a valid Malaysian phone number" required>
+                            <input name="phone" type="text" id="phone" name="phone" value="<%= employee.getEmployeePhoneNumber() %>" pattern="^01[0-9]-[0-9]{7,8}$" title="Please enter a valid Malaysian phone number" required>
                         </li>
                         <li>
                             <label for="email">Email:</label>

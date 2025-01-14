@@ -87,12 +87,12 @@
                             <br>
                             <div class="input-box">
                                     <label> Name:-</label>
-                                    <input name="name" type="text" placeholder="Enter full name" pattern ="^[A-Za-z\s]+$" title="Please enter a name in letter only" required/>
+                                    <input name="name" type="text" placeholder="Enter full name" pattern ="^[A-Za-z\s@]+$" title="Please enter a name in letter only" required/>
                             </div>
                             <br>
                             <div class="input-box">
                                     <label> Phone Number:-</label>
-                                    <input name="phoneNumber" type="text" placeholder="Enter phone number" pattern="^01[0-9]-?[0-9]{3,4}[0-9]{4}$" title="Please enter a valid Malaysian phone number" required/>
+                                    <input name="phoneNumber" type="text" placeholder="Enter phone number" pattern="^01[0-9]-[0-9]{7,8}$" title="Please enter a valid Malaysian phone number" required/>
                             </div>
                             <br>
 

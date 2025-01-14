@@ -24,6 +24,24 @@
 </head>
 
 <body>
+    <script>
+            function validateEmail() {
+                const emailInput = document.getElementById('email').value;
+
+                // Array of disallowed characters
+                const disallowedChars = [',', ':', ';', '<', '>', '(', ')', '[', ']', '\\', '/'];
+
+                // Check if the input contains any disallowed character
+                for (const char of disallowedChars) {
+                    if (emailInput.includes(char)) {
+                        alert(`Invalid email: the character '${char}' is not allowed.`);
+                        return false; // Prevent form submission
+                    }
+                }
+
+                return true; // Allow form submission if valid
+            }
+        </script>
     <%
         final EmployeeDAO employeeDAO = new EmployeeDAOImpl();
         final BranchDAO branchDAO = new BranchDAOImpl();
@@ -57,7 +75,7 @@
         </div>
         <!-- /Header -->
         <!-- Page Content -->
-        <form action="manage_employee.do" method="post">
+        <form action="manage_employee.do" method="post" onsubmit="return validateEmail()">
             <div class="content container-fluid">
                 <div class="profile-basic">
                     <h2 class="card-title">Edit Profile </h2>
@@ -69,11 +87,11 @@
                         </li>
                         <li>
                             <label for="phone">Phone:</label>
-                            <input type="text" id="phone" name="phone" value="<%= employee.getEmployeePhoneNumber() %>" required>
+                            <input type="text" id="phone" name="phone" value="<%= employee.getEmployeePhoneNumber() %>" pattern="^01[0-9]-[0-9]{7,8}$" title="Please enter a valid Malaysian phone number" required>
                         </li>
                         <li>
                             <label for="email">Email:</label>
-                            <input type="email" id="email" name="email" value="<%= employee.getEmployeeEmail() %>" required>
+                            <input type="email" id="email" name="email" value="<%= employee.getEmployeeEmail() %>" pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$" title="Please enter a valid email address (e.g., example@gmail.com) without spaces" required>
                         </li>
                         <li>
                             <label for="passportNo">Passport No:</label>
@@ -118,6 +136,7 @@
                     <input type="hidden" name="employeePassportNumber" value="<%= employee.getEmployeePassportNumber()  %>">
                     <input type="submit" value="Update" name="action">
                     <a href="specific_employee.jsp">Cancel</a>
+                    <p style="color:red" >${errorMsg}</p>
                     <p>${message}</p>
                 </div>
             </div>

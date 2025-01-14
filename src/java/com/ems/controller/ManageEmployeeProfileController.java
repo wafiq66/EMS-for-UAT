@@ -47,10 +47,10 @@ public class ManageEmployeeProfileController extends HttpServlet {
                 viewEmployee(request,response);
             }
             else if(action.equals("Update")){
-                updateEmployee(request,response);
+                verifyEmailPhoneEmployee(request,response);
             }
             else if(action.equals("updateProfile")){
-                verifyEmailPhone(request,response);
+                verifyEmailPhoneProfile(request,response);
             }
         }
     }
@@ -70,8 +70,7 @@ public class ManageEmployeeProfileController extends HttpServlet {
         
         }
     }
-    
-    protected void verifyEmailPhone(HttpServletRequest request, HttpServletResponse response){
+    protected void verifyEmailPhoneProfile(HttpServletRequest request, HttpServletResponse response){
             
         try{
             HttpSession session = request.getSession();
@@ -100,6 +99,45 @@ public class ManageEmployeeProfileController extends HttpServlet {
             }
             else{
                 updateProfile(request,response);
+            }
+            
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+            
+    }
+    
+    protected void verifyEmailPhoneEmployee(HttpServletRequest request, HttpServletResponse response){
+            
+        try{
+            HttpSession session = request.getSession();
+            int employeeID = Integer.parseInt(request.getParameter("employeeID"));
+            Employee employee = employeeDAO.getEmployeeById(employeeID);
+            
+            String phoneNumber = request.getParameter("phone");
+            String email = request.getParameter("email");
+            String errorMsg = null;
+            
+            
+            
+            if((!employee.getEmployeeEmail().equals(email) && employeeDAO.employeeEmailChecker(email)) || ( !employee.getEmployeePhoneNumber().equals(phoneNumber) && employeeDAO.employeePhoneNumberChecker(phoneNumber))){
+                
+                if((!employee.getEmployeeEmail().equals(email) && employeeDAO.employeeEmailChecker(email)) && ( !employee.getEmployeePhoneNumber().equals(phoneNumber) && employeeDAO.employeePhoneNumberChecker(phoneNumber))){
+                    errorMsg = "Phone Number and email have already been registered";
+                }
+                else if(!employee.getEmployeeEmail().equals(email) && employeeDAO.employeeEmailChecker(email)){
+                    errorMsg = "Email has already been registered";
+                }
+                else if(!employee.getEmployeePhoneNumber().equals(phoneNumber) && employeeDAO.employeePhoneNumberChecker(phoneNumber)){
+                    errorMsg = "Phone Number has already been registered";
+                }
+                
+                request.setAttribute("errorMsg",errorMsg);
+                request.getRequestDispatcher("update_employee.jsp").forward(request, response);
+            }
+            else{
+                updateEmployee(request,response);
             }
             
             
