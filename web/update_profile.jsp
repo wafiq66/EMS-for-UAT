@@ -1,3 +1,4 @@
+
 <%@page import="com.ems.model.Employee" %>
 <%@page import="com.ems.model.Branch" %>
 <%@page import="com.ems.dao.EmployeeDAO" %>
@@ -24,6 +25,24 @@
 </head>
 
 <body>
+  <script>
+            function validateEmail() {
+                const emailInput = document.getElementById('email').value;
+
+                // Array of disallowed characters
+                const disallowedChars = [',', ':', ';', '<', '>', '(', ')', '[', ']', '\\', '/'];
+
+                // Check if the input contains any disallowed character
+                for (const char of disallowedChars) {
+                    if (emailInput.includes(char)) {
+                        alert(`Invalid email: the character '${char}' is not allowed.`);
+                        return false; // Prevent form submission
+                    }
+                }
+
+                return true; // Allow form submission if valid
+            }
+        </script>
     <%
         final EmployeeDAO employeeDAO = new EmployeeDAOImpl();
         final BranchDAO branchDAO = new BranchDAOImpl();
@@ -58,7 +77,7 @@
         </div>
         <!-- /Header -->
         <!-- Page Content -->
-        <form action="manage_employee.do" method="post">
+        <form action="manage_employee.do" method="post" onsubmit="return validateEmail()">
             <div class="content container-fluid">
                 <div class="profile-basic">
                     <h2 class="card-title">Edit Profile </h2>
@@ -91,6 +110,7 @@
                     <input type="hidden" name="action" value="updateProfile">
                     <input type="submit" value="Update">
                   <a href="employee_profile_main.jsp">Cancel</a>
+                  <p style="color:red" >${errorMsg}</p>
                   <p>${message}</p>
                 </div>
               </div>
@@ -99,4 +119,5 @@
         </div>
 		<!-- /Main Wrapper -->
     </body>
+
 </html>

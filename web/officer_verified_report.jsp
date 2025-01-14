@@ -12,26 +12,17 @@
 <%@page import="com.ems.model.Employee"%>
 <%@page import="com.ems.dao.EmployeeDAO"%>
 <%@page import="com.ems.dao.EmployeeDAOImpl"%>
+<%@page import="java.text.SimpleDateFormat"%>
 
-<%@ page import="java.text.SimpleDateFormat" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
     <title>Salary Information</title>
-    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <meta name="description" content="Smarthr - Bootstrap Admin Template">
-    <meta name="keywords" content="admin, estimates, bootstrap, business, corporate, creative, management, minimal, modern, accounts, invoice, html5, responsive, CRM, Projects">
-    <meta name="author" content="Dreamguys - Bootstrap Admin Template">
-    <meta name="robots" content="noindex, nofollow">
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.png">
     <link rel="stylesheet" href="bootstrap.min.css">
     <link rel="stylesheet" href="font-awesome.min.css">
     <link rel="stylesheet" href="line-awesome.min.css">
-    <link rel="stylesheet" href="select2.min.css">
-    <link rel="stylesheet" href="bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" href="bootstrap-tagsinput/bootstrap-tagsinput.css">
     <link rel="stylesheet" href="css/report-update.css">
 </head>
 <body>
@@ -40,32 +31,21 @@
         final ManagerDAO managerDAO = new ManagerDAOImpl();
         final EmployeeDAO employeeDAO = new EmployeeDAOImpl();
         final BranchDAO branchDAO = new BranchDAOImpl();
+
         // Retrieve attributes from the request
-        Object yearObj = request.getAttribute("year");
-        Object monthObj = request.getAttribute("month");
-        Object branchObj = request.getAttribute("branchID");
-        
-        // Parse attributes as integers with null checking and default values
-        int year = (yearObj != null) ? Integer.parseInt(yearObj.toString()) : 0;
-        int month = (monthObj != null) ? Integer.parseInt(monthObj.toString()) : 0;
-        int selectedBranchId = (branchObj != null) ? Integer.parseInt(branchObj.toString()) : 0; // Set this variable as needed (e.g., from request or session)
-        
-        System.out.println("Tahun: " + year + ", Bulan: " + month);
-        
-        RestaurantManager manager = (RestaurantManager)session.getAttribute("managerLog");
+        int year = (request.getAttribute("year") != null) ? Integer.parseInt(request.getAttribute("year").toString()) : 0;
+        int month = (request.getAttribute("month") != null) ? Integer.parseInt(request.getAttribute("month").toString()) : 0;
+        int selectedBranchId = (request.getAttribute("branchID") != null) ? Integer.parseInt(request.getAttribute("branchID").toString()) : 0;
+
+        RestaurantManager manager = (RestaurantManager) session.getAttribute("managerLog");
         Branch[] branches = branchDAO.getAllBranch();
-        
-        Attendance[] attendances = null;
-        
-        if(selectedBranchId > 0){
-            attendances = attendanceDAO.selectAllAttendance(year, month, selectedBranchId);
-        }
-        
+        Attendance[] attendances = (selectedBranchId > 0) ? attendanceDAO.selectAllAttendance(year, month, selectedBranchId) : null;
+
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
     %>
-    <div class="main-wrapper"> 
-        <nav class="nav-bar"> 
-            <div class="page-title-box-1"> 
+    <div class="main-wrapper">
+        <nav class="nav-bar">
+            <div class="page-title-box-1">
                 <h3>REZEKY TOMYAM</h3>
             </div>
             <ul>
@@ -76,37 +56,29 @@
                 <li><a href="welcome.html">Log Out</a></li>
             </ul>
         </nav>
-        <div class="content"> 
+        <div class="content">
             <header class="header">
-                <div class="page-title-box"> 
+                <div class="page-title-box">
                     <h2>Report Information</h2>
                 </div>
             </header>
             <main>
                 <form action="attendance.view" method="post">
-                    <label for="month">Month:-</label>
+                    <label for="month">Month:</label>
                     <input type="month" name="month" value="${fullDate}" required>
                     <select name="branch" id="branch">
-                        <%
-                            // Example variable (replace with actual variable holding the selected branch ID)
-                            
-
-                            for (Branch branch : branches) {
-                        %>
-                            <option value="<%= branch.getBranchID() %>"
+                        <% for (Branch branch : branches) { %>
+                            <option value="<%= branch.getBranchID() %>" 
                                 <%= (branch.getBranchID() == selectedBranchId) ? "selected" : "" %>>
                                 <%= branch.getBranchName() %>
                             </option>
-                        <% 
-                            }
-                        %>
+                        <% } %>
                     </select>
                     <input type="hidden" name="action" value="getMonthReportOfficer">
                     <button type="submit" class="submit-button">Find</button>
                 </form>
                 <br>
-                
-                <table class="reportTable" border="1"> 
+                <table class="reportTable" border="1">
                     <tr>
                         <th>Employee ID</th>
                         <th>Attendance Date</th>
@@ -115,31 +87,24 @@
                         <th>Overtime Duration</th>
                         <th>Total Hours</th>
                     </tr>
-                    
-                    <% 
-                       
-                    if(!(attendances != null)) { %>
-                        <td colspan="6" style="text-align:center;">  </td>
-                    <% } 
-                    else{ 
-                    
-                    for(Attendance attendance : attendances){
-                        Employee employee = employeeDAO.getEmployeeByAttendance(attendance);
+                    <% if (attendances == null || attendances.length == 0) { %>
+                        <tr>
+                            <td colspan="6" style="text-align:center;"><em>No attendance records found</em></td>
+                        </tr>
+                    <% } else {
+                        for (Attendance attendance : attendances) {
+                            Employee employee = employeeDAO.getEmployeeByAttendance(attendance);
                     %>
-                    <tr>
-                        <td><%= employee.getEmployeeID() %></td>
-                        <td><%= attendance.getAttendanceDate() %></td>
-                        <td><%= attendance.getClockInTime() %></td>
-                        <td><%= attendance.getClockOutTime() %></td>
-                        <td><%= (attendance.getOvertimeDuration() != null) ? sdf.format(attendance.getOvertimeDuration()) : "No Overtime" %></td>
-                        <td><%= attendance.calculateTotalHours() %></td>
-                    </tr>
-                    <%} 
-                        
-                    }   
-                    %>
+                        <tr>
+                            <td><%= employee.getEmployeeID() %></td>
+                            <td><%= attendance.getAttendanceDate() %></td>
+                            <td><%= attendance.getClockInTime() %></td>
+                            <td><%= attendance.getClockOutTime() %></td>
+                            <td><%= (attendance.getOvertimeDuration() != null) ? sdf.format(attendance.getOvertimeDuration()) : "No Overtime" %></td>
+                            <td><%= attendance.calculateTotalHours() %></td>
+                        </tr>
+                    <% } } %>
                 </table>
-                
             </main>
         </div>
         <footer>

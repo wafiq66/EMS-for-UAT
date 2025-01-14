@@ -46,7 +46,7 @@ public class RegisterEmployeeController extends HttpServlet {
                 verifyPassportNumber(request,response,passportNumberInput);
             }
             else if(action.equals("recordEmployee")){
-                recordEmployee(request,response);
+                verifyEmailPhone(request,response);
             }
         }
     }
@@ -80,16 +80,55 @@ public class RegisterEmployeeController extends HttpServlet {
             
     }
     
+    protected void verifyEmailPhone(HttpServletRequest request, HttpServletResponse response){
+            
+        try{
+            HttpSession session = request.getSession();
+            String phoneNumber = request.getParameter("phoneNumber");
+            String email = request.getParameter("email");
+            String errorMsg = null;
+            
+            if(employeeDAO.employeeEmailChecker(email) || employeeDAO.employeePhoneNumberChecker(phoneNumber)){
+                
+                if(employeeDAO.employeeEmailChecker(email) && employeeDAO.employeePhoneNumberChecker(phoneNumber)){
+                    errorMsg = "Phone Number and email have already been registered";
+                }
+                else if(employeeDAO.employeeEmailChecker(email)){
+                    errorMsg = "Email has already been registered";
+                }
+                else if(employeeDAO.employeePhoneNumberChecker(phoneNumber)){
+                    errorMsg = "Phone Number has already been registered";
+                }
+                
+                request.setAttribute("errorMsg",errorMsg);
+                request.getRequestDispatcher("registrator_employee.jsp").forward(request, response);
+            }
+            else{
+                recordEmployee(request,response);
+            }
+            
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+            
+    }
+    
     protected void recordEmployee(HttpServletRequest request, HttpServletResponse response){
         
         try{
             HttpSession session = request.getSession();
             HROfficer officer = (HROfficer) session.getAttribute("officerLog");
             String condition = "disabled";
+            
+            String phoneNumber = request.getParameter("phoneNumber");
+            String email = request.getParameter("email");
+            
+            
             Employee employee = new Employee();
             employee.setEmployeeName(request.getParameter("name"));
-            employee.setEmployeePhoneNumber(request.getParameter("phoneNumber"));
-            employee.setEmployeeEmail(request.getParameter("email"));
+            employee.setEmployeePhoneNumber(phoneNumber);
+            employee.setEmployeeEmail(email);
             employee.setEmployeeHourlyPay(Double.parseDouble(request.getParameter("hourlyPay")));
             employee.setEmployeePassportNumber(request.getParameter("passportNumber"));
             

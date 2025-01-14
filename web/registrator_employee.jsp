@@ -81,8 +81,9 @@
                             
                             <div class="input-box">
                                     <label> Passport Number:-</label>
-                                    <input name="passportNumber" type="text" placeholder="Enter passport number" value="<%=passportNumber %>" pattern="[A-Z][0-9]{7}" title="Please enter a passport number in the format: A00000000" disabled/>
+                                    <input name="passportNumber" type="text" placeholder="Enter passport number" value="<%=passportNumber %>" disabled/>
                             </div>
+                            <p style="color:red" >${errorMsg}</p>
                             <br>
                             <div class="input-box">
                                     <label> Name:-</label>
@@ -145,6 +146,5 @@
 				
 				
 
-			
-				
+
 				
