@@ -79,8 +79,8 @@
                                 id="phone" 
                                 name="phone" 
                                 value="<%= employee.getEmployeePhoneNumber() %>" 
-                                pattern="01[1-9]-\d{3} \d{4}|01[1-9]-\d{4} \d{4}" 
-                                title="Please enter a valid phone number (e.g., 011-111 1111 or 011-1111 1111)"
+                                pattern="01[1-9]-\d{3}\d{4}|01[1-9]-\d{4}\d{4}" 
+                                title="Please enter a valid phone number (e.g., 011-1111111 or 011-11111111)"
                                 placeholder="012-345 6789"
                                 required>
                         </li>
